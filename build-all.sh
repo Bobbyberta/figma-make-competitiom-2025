@@ -59,3 +59,4 @@ build_app "Simulations/Vector Fields Visualization Tool" "Vector Fields Visualiz
 
 echo -e "\n${GREEN}🎉 All apps built successfully!${NC}"
 echo -e "You can now deploy to GitHub Pages or serve locally with: ${BLUE}python3 serve.py${NC}"
+# Test comment

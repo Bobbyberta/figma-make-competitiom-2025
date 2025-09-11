@@ -57,27 +57,6 @@
         // App registry - easy to maintain and modify
         const apps = [
             {
-                name: "Time Zone Calculator",
-                category: "applications",
-                description: "Calculate meeting times across different time zones with an interactive world map view",
-                path: "./Applications/Time Zone Calculator/build/index.html",
-                tags: ["timezone", "calendar", "meetings"]
-            },
-            {
-                name: "Glass Root Game Prototype",
-                category: "games",
-                description: "An interactive game prototype with glass root mechanics",
-                path: "./Games/Glass Root Game Prototype/build/index.html",
-                tags: ["game", "interactive", "prototype"]
-            },
-            {
-                name: "Rain Topography Simulation",
-                category: "games",
-                description: "Simulate rain effects on different topographical terrains",
-                path: "./Games/Rain Topography Simulation App/build/index.html",
-                tags: ["simulation", "weather", "terrain"]
-            },
-            {
                 name: "Bird Murmuration Simulator",
                 category: "simulations",
                 description: "Watch flocks of birds form beautiful murmurations with realistic behavioral patterns",
@@ -92,18 +71,11 @@
                 tags: ["fractals", "math", "visualization"]
             },
             {
-                name: "Interactive Beach Simulation",
+                name: "Vector Fields Visualization",
                 category: "simulations",
-                description: "Simulate beach environments with interactive elements and natural phenomena",
-                path: "./Simulations/Interactive Beach Simulation/build/index.html",
-                tags: ["beach", "environment", "interactive"]
-            },
-            {
-                name: "Interactive Matrix Transformations",
-                category: "simulations",
-                description: "Visualize and interact with matrix transformations in real-time",
-                path: "./Simulations/Interactive Matrix Transformations/build/index.html",
-                tags: ["math", "linear algebra", "visualization"]
+                description: "Visualize and manipulate vector fields with interactive tools",
+                path: "./Simulations/Vector Fields Visualization Tool/build/index.html",
+                tags: ["vectors", "physics", "visualization"]
             },
             {
                 name: "Reaction-Diffusion Simulation",
@@ -113,12 +85,40 @@
                 tags: ["chemistry", "patterns", "diffusion"]
             },
             {
-                name: "Vector Fields Visualization",
+                name: "Interactive Matrix Transformations",
                 category: "simulations",
-                description: "Visualize and manipulate vector fields with interactive tools",
-                path: "./Simulations/Vector Fields Visualization Tool/build/index.html",
-                tags: ["vectors", "physics", "visualization"]
-            }
+                description: "Visualize and interact with matrix transformations in real-time",
+                path: "./Simulations/Interactive Matrix Transformations/build/index.html",
+                tags: ["math", "linear algebra", "visualization"]
+            },
+            {
+                name: "Glass Root Game Prototype",
+                category: "games",
+                description: "An interactive game prototype with glass root mechanics",
+                path: "./Games/Glass Root Game Prototype/build/index.html",
+                tags: ["game", "interactive", "prototype"]
+            },
+            {
+                name: "Rain Topography Simulation",
+                category: "games",
+                description: "Simulate rain effects on different topographical terrains",
+                path: "./Games/Rain Topography Simulation App/build/index.html",
+                tags: ["dekstop only", "simulation", "weather", "terrain"]
+            },
+            {
+                name: "Time Zone Calculator",
+                category: "applications",
+                description: "Calculate meeting times across different time zones with an interactive world map view",
+                path: "./Applications/Time Zone Calculator/build/index.html",
+                tags: ["dekstop only", "timezone", "meetings"]
+            },
+            {
+                name: "Interactive Beach Simulation",
+                category: "simulations",
+                description: "Simulate beach environments with interactive elements and natural phenomena",
+                path: "./Simulations/Interactive Beach Simulation/build/index.html",
+                tags: ["mobile only", "simulation", "interactive"]
+            },
         ];
 
         let currentCategory = 'all';

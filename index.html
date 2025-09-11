@@ -55,8 +55,10 @@
 
     <script>
         // App registry - easy to maintain and modify
+        // Each app now has an 'id' for URL routing
         const apps = [
             {
+                id: "bird-murmuration-simulator",
                 name: "Bird Murmuration Simulator",
                 category: "simulations",
                 description: "Watch flocks of birds form beautiful murmurations with realistic behavioral patterns",
@@ -64,6 +66,7 @@
                 tags: ["birds", "flocking", "nature"]
             },
             {
+                id: "fractal-simulation",
                 name: "Fractal Simulation with Config",
                 category: "simulations",
                 description: "Interactive fractal generator with configurable parameters and real-time rendering",
@@ -71,6 +74,7 @@
                 tags: ["fractals", "math", "visualization"]
             },
             {
+                id: "vector-fields-visualization",
                 name: "Vector Fields Visualization",
                 category: "simulations",
                 description: "Visualize and manipulate vector fields with interactive tools",
@@ -78,6 +82,7 @@
                 tags: ["vectors", "physics", "visualization"]
             },
             {
+                id: "reaction-diffusion-simulation",
                 name: "Reaction-Diffusion Simulation",
                 category: "simulations",
                 description: "Explore reaction-diffusion patterns and chemical processes",
@@ -85,6 +90,7 @@
                 tags: ["chemistry", "patterns", "diffusion"]
             },
             {
+                id: "interactive-matrix-transformations",
                 name: "Interactive Matrix Transformations",
                 category: "simulations",
                 description: "Visualize and interact with matrix transformations in real-time",
@@ -92,6 +98,7 @@
                 tags: ["math", "linear algebra", "visualization"]
             },
             {
+                id: "glass-root-game",
                 name: "Glass Root Game Prototype",
                 category: "games",
                 description: "An interactive game prototype with glass root mechanics",
@@ -99,6 +106,7 @@
                 tags: ["game", "interactive", "prototype"]
             },
             {
+                id: "rain-topography-simulation",
                 name: "Rain Topography Simulation",
                 category: "games",
                 description: "Simulate rain effects on different topographical terrains",
@@ -106,6 +114,7 @@
                 tags: ["dekstop only", "simulation", "weather", "terrain"]
             },
             {
+                id: "time-zone-calculator",
                 name: "Time Zone Calculator",
                 category: "applications",
                 description: "Calculate meeting times across different time zones with an interactive world map view",
@@ -113,6 +122,7 @@
                 tags: ["dekstop only", "timezone", "meetings"]
             },
             {
+                id: "interactive-beach-simulation",
                 name: "Interactive Beach Simulation",
                 category: "simulations",
                 description: "Simulate beach environments with interactive elements and natural phenomena",
@@ -128,7 +138,7 @@
             const filteredApps = category === 'all' ? apps : apps.filter(app => app.category === category);
             
             container.innerHTML = filteredApps.map(app => `
-                <div class="app-card bg-white rounded-xl shadow-lg p-6 cursor-pointer" onclick="openApp('${app.path}')" role="button" tabindex="0" aria-label="Open ${app.name}" onkeydown="if(event.key==='Enter'||event.key===' '){openApp('${app.path}')}">
+                <div class="app-card bg-white rounded-xl shadow-lg p-6 cursor-pointer" onclick="openApp('${app.id}')" role="button" tabindex="0" aria-label="Open ${app.name}" onkeydown="if(event.key==='Enter'||event.key===' '){openApp('${app.id}')}">
                     <div class="flex items-center justify-between mb-4">
                         <div class="gradient-icon">
                             <span>${app.name.charAt(0)}</span>
@@ -173,7 +183,17 @@
             renderApps(category);
         }
 
-        function openApp(path) {
+        function openApp(appId) {
+            // Update URL with app ID
+            window.location.hash = `#app=${appId}`;
+            
+            // Find the app by ID
+            const app = apps.find(a => a.id === appId);
+            if (!app) {
+                console.error('App not found:', appId);
+                return;
+            }
+            
             // Add loading state
             const container = document.querySelector('.container');
             container.style.opacity = '0.5';
@@ -185,7 +205,7 @@
                 
                 // Create iframe for the app
                 const iframe = document.createElement('iframe');
-                iframe.src = path;
+                iframe.src = app.path;
                 iframe.style.width = '100vw';
                 iframe.style.height = '100vh';
                 iframe.style.border = 'none';
@@ -194,6 +214,9 @@
                 iframe.style.left = '0';
                 iframe.style.zIndex = '1000';
                 iframe.id = 'app-iframe';
+                
+                // Update page title
+                document.title = `${app.name} - Figma Make Competition`;
                 
                 // Add loading handler
                 iframe.onload = function() {
@@ -210,6 +233,12 @@
         }
 
         function goHome() {
+            // Clear the URL hash
+            window.location.hash = '';
+            
+            // Reset page title
+            document.title = 'Figma Make Competition - Portfolio';
+            
             // Smooth transition back to portfolio
             const iframe = document.getElementById('app-iframe');
             const container = document.querySelector('.container');
@@ -234,6 +263,78 @@
             }, 50);
         }
 
+        // URL routing functions
+        function handleHashChange() {
+            const hash = window.location.hash;
+            
+            if (hash.startsWith('#app=')) {
+                const appId = hash.substring(5); // Remove '#app=' prefix
+                const app = apps.find(a => a.id === appId);
+                
+                if (app) {
+                    // Only open if not already open
+                    const iframe = document.getElementById('app-iframe');
+                    if (!iframe || iframe.src !== app.path) {
+                        openAppDirect(app);
+                    }
+                } else {
+                    // Invalid app ID, go home
+                    goHome();
+                }
+            } else {
+                // No hash or invalid hash, show portfolio
+                const iframe = document.getElementById('app-iframe');
+                if (iframe) {
+                    goHome();
+                }
+            }
+        }
+        
+        function openAppDirect(app) {
+            // Direct app opening without URL manipulation (to avoid infinite loops)
+            const container = document.querySelector('.container');
+            container.style.opacity = '0.5';
+            
+            // Hide portfolio content and show back button
+            setTimeout(() => {
+                container.style.display = 'none';
+                document.getElementById('back-button').classList.remove('hidden');
+                
+                // Remove existing iframe if any
+                const existingIframe = document.getElementById('app-iframe');
+                if (existingIframe) {
+                    existingIframe.remove();
+                }
+                
+                // Create iframe for the app
+                const iframe = document.createElement('iframe');
+                iframe.src = app.path;
+                iframe.style.width = '100vw';
+                iframe.style.height = '100vh';
+                iframe.style.border = 'none';
+                iframe.style.position = 'fixed';
+                iframe.style.top = '0';
+                iframe.style.left = '0';
+                iframe.style.zIndex = '1000';
+                iframe.id = 'app-iframe';
+                
+                // Update page title
+                document.title = `${app.name} - Figma Make Competition`;
+                
+                // Add loading handler
+                iframe.onload = function() {
+                    iframe.style.opacity = '1';
+                };
+                iframe.style.opacity = '0';
+                iframe.style.transition = 'opacity 0.3s ease';
+                
+                document.body.appendChild(iframe);
+                
+                // Prevent scrolling on the body when app is open
+                document.body.style.overflow = 'hidden';
+            }, 100);
+        }
+
         // Add keyboard navigation support
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
@@ -244,6 +345,14 @@
             }
         });
 
+        // Listen for browser back/forward navigation
+        window.addEventListener('hashchange', handleHashChange);
+        
+        // Handle page load with hash
+        window.addEventListener('load', function() {
+            handleHashChange();
+        });
+
         // Optimize for mobile performance
         if ('serviceWorker' in navigator) {
             // This can be implemented later for caching
@@ -251,6 +360,11 @@
 
         // Initialize the page
         renderApps();
+        
+        // Handle initial URL if page loads with a hash
+        if (window.location.hash) {
+            handleHashChange();
+        }
     </script>
 </body>
 </html>

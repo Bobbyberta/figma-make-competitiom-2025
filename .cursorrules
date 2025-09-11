@@ -1,0 +1,252 @@
+# Figma Make Competition Portfolio - AI Assistant Rules
+# Last updated: 2025-09-11 20:31:33 (commit: unknown, branch: HEAD
+unknown)
+# Total Apps: 9 (1 Applications, 2 Games, 6 Simulations)
+
+## Project Overview
+This is a unified portfolio hosting solution for multiple React applications organized into three categories:
+- **Applications**: Productivity tools and utilities (1 apps)
+- **Games**: Interactive games and prototypes (2 apps)
+- **Simulations**: Scientific and mathematical simulations (6 apps)
+
+The project uses a simple iframe-based approach for maximum simplicity and maintainability.
+
+### Current App Inventory
+- Applications: Time Zone Calculator\n- Games: Glass Root Game Prototype\n- Games: Rain Topography Simulation App\n- Simulations: Bird Murmuration Simulator\n- Simulations: Fractal Simulation with Config\n- Simulations: Interactive Beach Simulation\n- Simulations: Interactive Matrix Transformations\n- Simulations: Reaction-Diffusion Simulation App\n- Simulations: Vector Fields Visualization Tool\n
+
+## Architecture & Design Principles
+
+### Core Philosophy
+- **Simplicity First**: Minimal dependencies, pure web technologies
+- **AI-Friendly**: Clear structure, extensive documentation, predictable patterns
+- **Mobile-First**: Responsive design optimized for all devices
+- **Production-Ready**: GitHub Pages deployment with proper build processes
+
+### Technology Stack
+- **Frontend**: Pure HTML, CSS, JavaScript (no frameworks for the portfolio itself)
+- **Individual Apps**: React + Vite + TypeScript + Radix UI + Tailwind CSS
+- **Build System**: Individual Vite builds with relative paths (`base: './'`)
+- **Deployment**: GitHub Actions → GitHub Pages
+- **Development**: Python HTTP server with CORS
+
+## File Structure & Conventions
+
+### Root Directory
+```
+├── index.html              # Main portfolio entry point
+├── styles.css              # Production CSS (no CDN dependencies)
+├── serve.py               # Local development server
+├── build-all.sh           # Build script for all apps
+├── update-cursorrules.sh  # Script to update this file
+├── .cursorrules           # This file - AI assistant guidelines
+├── .github/workflows/     # GitHub Actions deployment
+├── Applications/          # Productivity apps (1 apps)
+├── Games/                 # Interactive games (2 apps)
+└── Simulations/          # Scientific simulations (6 apps)
+```
+
+### Individual App Structure
+Each app follows this pattern:
+```
+AppName/
+├── src/                   # Source code
+├── build/                 # Production build (auto-generated)
+├── package.json          # Dependencies and scripts
+├── vite.config.ts        # MUST include base: './'
+└── index.html            # Development entry point
+```
+
+## Critical Configuration Requirements
+
+### Vite Configuration
+Every app MUST have `base: './'` in vite.config.ts:
+```typescript
+export default defineConfig({
+  base: './',  // CRITICAL: Enables relative paths for iframe loading
+  build: {
+    target: 'esnext',
+    outDir: 'build',
+  },
+  // ... other config
+});
+```
+
+### App Registry
+All apps are registered in `index.html` in the `apps` array:
+```javascript
+{
+  name: "App Name",
+  category: "applications|games|simulations",
+  description: "Brief description",
+  path: "./Category/App Name/build/index.html", // Note: /build/ path
+  tags: ["tag1", "tag2"]
+}
+```
+
+## Development Workflow
+
+### Adding New Apps
+1. Create app directory in appropriate category folder
+2. Ensure vite.config.ts has `base: './'`
+3. Build app: `cd "App Directory" && npm run build`
+4. Add entry to apps array in index.html
+5. Update build-all.sh to include new app
+6. Run `./update-cursorrules.sh` to update this file
+7. Test locally: `python3 serve.py`
+
+### Building & Deployment
+```bash
+# Build all apps
+./build-all.sh
+
+# Update documentation
+./update-cursorrules.sh
+
+# Local development
+python3 serve.py [port]
+
+# Deploy to GitHub Pages
+git push origin main  # Triggers GitHub Actions
+```
+
+### Mobile Optimization
+- All breakpoints: 480px (small mobile), 640px (large mobile), 768px (tablet), 1024px (desktop)
+- Touch targets: minimum 44px (Apple guidelines)
+- Navigation: horizontally scrollable on mobile
+- Typography: scales appropriately per device
+- Performance: smooth transitions, proper loading states
+
+## Code Standards & Best Practices
+
+### CSS Architecture
+- Mobile-first responsive design
+- Utility classes with semantic names
+- Touch device optimizations with `@media (hover: none)`
+- Proper accessibility with focus states
+- Grid layouts that adapt to screen size
+
+### JavaScript Patterns
+- Pure vanilla JS for portfolio logic
+- Event-driven architecture
+- Proper iframe lifecycle management
+- Keyboard navigation support (ESC to go back)
+- Smooth transitions and loading states
+
+### HTML Structure
+- Semantic markup with proper ARIA labels
+- Accessibility: role, tabindex, aria-label attributes
+- Progressive enhancement
+- Mobile viewport optimization
+
+## AI Assistant Guidelines
+
+### When Working with This Project
+
+#### DO:
+- Always read this .cursorrules file first
+- Check existing patterns before creating new ones
+- Maintain the simple, dependency-free approach for the portfolio
+- Ensure mobile responsiveness for any changes
+- Test all changes with `python3 serve.py`
+- Update build-all.sh when adding new apps
+- Run `./update-cursorrules.sh` after significant changes
+- Use relative paths for all iframe-loaded content
+- Follow the established CSS utility patterns
+- Preserve the iframe-based isolation approach
+
+#### DON'T:
+- Add framework dependencies to the main portfolio
+- Use absolute paths in Vite builds (breaks iframe loading)
+- Create complex build orchestration
+- Modify individual app architectures unnecessarily
+- Break mobile responsiveness
+- Add CDN dependencies to production builds
+- Create tightly coupled components
+
+### Common Tasks & Solutions
+
+#### Adding a New App
+```bash
+# 1. Create app with proper Vite config
+# 2. Add to apps array in index.html
+# 3. Update build-all.sh
+# 4. Test: ./build-all.sh && python3 serve.py
+# 5. Update docs: ./update-cursorrules.sh
+```
+
+#### Fixing App Loading Issues
+- Check that vite.config.ts has `base: './'`
+- Verify path in apps array points to `/build/index.html`
+- Ensure app was built with `npm run build`
+
+#### Mobile Responsiveness Issues
+- Check CSS media queries: 480px, 640px, 768px, 1024px
+- Verify touch targets are 44px minimum
+- Test navigation scrolling on small screens
+- Ensure proper viewport meta tag
+
+#### Performance Optimization
+- Apps load in iframes for isolation
+- Smooth transitions with proper loading states
+- Lazy loading can be added for large app collections
+- Service worker support is prepared but not implemented
+
+### Error Patterns to Watch For
+1. **404 Asset Errors**: Usually means missing `base: './'` in vite.config.ts
+2. **Mobile Layout Issues**: Check responsive grid classes and media queries
+3. **Navigation Problems**: Verify apps array entries have correct paths
+4. **Build Failures**: Ensure all apps have proper package.json and dependencies
+
+## Deployment & Hosting
+
+### GitHub Pages Setup
+1. Enable GitHub Pages with "GitHub Actions" source
+2. Push to main branch triggers automatic deployment
+3. GitHub Actions runs build-all.sh and deploys everything
+4. Portfolio accessible at: https://username.github.io/repo-name
+
+### Local Development
+- Use `python3 serve.py` for local testing
+- CORS headers included for proper iframe loading
+- Hot reload not needed - portfolio is static
+- Individual apps can use their own dev servers
+
+## Maintenance & Updates
+
+### Regular Tasks
+- Run `./update-cursorrules.sh` when architecture changes
+- Keep build-all.sh synchronized with app list
+- Test mobile responsiveness on new devices
+- Update dependencies in individual apps
+- Monitor GitHub Actions deployment status
+
+### Version Control
+- Commit built assets (build/ folders) for GitHub Pages
+- .gitignore excludes node_modules but includes builds
+- Individual apps maintain their own package-lock.json
+- Use conventional commit messages
+
+## Troubleshooting
+
+### Common Issues
+1. **Apps not loading**: Check Vite base path configuration
+2. **Mobile layout broken**: Verify responsive CSS classes
+3. **Build script failing**: Ensure all package.json files exist
+4. **GitHub Pages not updating**: Check Actions tab for deployment errors
+
+### Debug Commands
+```bash
+# Check app structure
+find . -name "package.json" | head -10
+
+# Verify Vite configs
+grep -r "base:" */*/vite.config.ts
+
+# Test local server
+python3 serve.py 8000
+```
+
+This project prioritizes simplicity, maintainability, and AI-friendliness above all else. When in doubt, choose the simpler solution that's easier for future AI agents to understand and modify.
+
+---
+*This file is automatically updated by ./update-cursorrules.sh*

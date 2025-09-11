@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Figma Make Competition - Portfolio</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>"  type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-6 py-12">
+        <!-- Header -->
+        <header class="text-center mb-16">
+            <h1 class="text-5xl font-bold text-gray-900 mb-4">Figma Make Competition</h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                A collection of interactive applications, games, and simulations built for the Figma Make Competition
+            </p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="flex justify-center mb-12">
+            <div class="nav-container bg-white rounded-lg shadow-sm">
+                <div class="nav-buttons">
+                    <button onclick="showCategory('all')" class="category-btn px-6 py-2 rounded-md transition-colors bg-blue-500 text-white" data-category="all">
+                        All
+                    </button>
+                    <button onclick="showCategory('applications')" class="category-btn px-6 py-2 rounded-md transition-colors text-gray-600 hover:bg-gray-100" data-category="applications">
+                        Applications
+                    </button>
+                    <button onclick="showCategory('games')" class="category-btn px-6 py-2 rounded-md transition-colors text-gray-600 hover:bg-gray-100" data-category="games">
+                        Games
+                    </button>
+                    <button onclick="showCategory('simulations')" class="category-btn px-6 py-2 rounded-md transition-colors text-gray-600 hover:bg-gray-100" data-category="simulations">
+                        Simulations
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Apps Grid -->
+        <div id="apps-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <!-- Apps will be loaded here by JavaScript -->
+        </div>
+
+        <!-- Back to Portfolio Button (hidden by default) -->
+        <div id="back-button" class="fixed top-6 left-6 hidden">
+            <button onclick="goHome()" class="bg-white shadow-lg rounded-full p-3 hover:shadow-xl transition-shadow">
+                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // App registry - easy to maintain and modify
+        const apps = [
+            {
+                name: "Time Zone Calculator",
+                category: "applications",
+                description: "Calculate meeting times across different time zones with an interactive world map view",
+                path: "./Applications/Time Zone Calculator/build/index.html",
+                tags: ["timezone", "calendar", "meetings"]
+            },
+            {
+                name: "Glass Root Game Prototype",
+                category: "games",
+                description: "An interactive game prototype with glass root mechanics",
+                path: "./Games/Glass Root Game Prototype/build/index.html",
+                tags: ["game", "interactive", "prototype"]
+            },
+            {
+                name: "Rain Topography Simulation",
+                category: "games",
+                description: "Simulate rain effects on different topographical terrains",
+                path: "./Games/Rain Topography Simulation App/build/index.html",
+                tags: ["simulation", "weather", "terrain"]
+            },
+            {
+                name: "Bird Murmuration Simulator",
+                category: "simulations",
+                description: "Watch flocks of birds form beautiful murmurations with realistic behavioral patterns",
+                path: "./Simulations/Bird Murmuration Simulator/build/index.html",
+                tags: ["birds", "flocking", "nature"]
+            },
+            {
+                name: "Fractal Simulation with Config",
+                category: "simulations",
+                description: "Interactive fractal generator with configurable parameters and real-time rendering",
+                path: "./Simulations/Fractal Simulation with Config/build/index.html",
+                tags: ["fractals", "math", "visualization"]
+            },
+            {
+                name: "Interactive Beach Simulation",
+                category: "simulations",
+                description: "Simulate beach environments with interactive elements and natural phenomena",
+                path: "./Simulations/Interactive Beach Simulation/build/index.html",
+                tags: ["beach", "environment", "interactive"]
+            },
+            {
+                name: "Interactive Matrix Transformations",
+                category: "simulations",
+                description: "Visualize and interact with matrix transformations in real-time",
+                path: "./Simulations/Interactive Matrix Transformations/build/index.html",
+                tags: ["math", "linear algebra", "visualization"]
+            },
+            {
+                name: "Reaction-Diffusion Simulation",
+                category: "simulations",
+                description: "Explore reaction-diffusion patterns and chemical processes",
+                path: "./Simulations/Reaction-Diffusion Simulation App/build/index.html",
+                tags: ["chemistry", "patterns", "diffusion"]
+            },
+            {
+                name: "Vector Fields Visualization",
+                category: "simulations",
+                description: "Visualize and manipulate vector fields with interactive tools",
+                path: "./Simulations/Vector Fields Visualization Tool/build/index.html",
+                tags: ["vectors", "physics", "visualization"]
+            }
+        ];
+
+        let currentCategory = 'all';
+
+        function renderApps(category = 'all') {
+            const container = document.getElementById('apps-container');
+            const filteredApps = category === 'all' ? apps : apps.filter(app => app.category === category);
+            
+            container.innerHTML = filteredApps.map(app => `
+                <div class="app-card bg-white rounded-xl shadow-lg p-6 cursor-pointer" onclick="openApp('${app.path}')" role="button" tabindex="0" aria-label="Open ${app.name}" onkeydown="if(event.key==='Enter'||event.key===' '){openApp('${app.path}')}">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="gradient-icon">
+                            <span>${app.name.charAt(0)}</span>
+                        </div>
+                        <span class="text-xs font-medium px-3 py-1 rounded-full ${getCategoryColor(app.category)}">
+                            ${app.category}
+                        </span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">${app.name}</h3>
+                    <p class="text-gray-600 mb-4">${app.description}</p>
+                    <div class="flex flex-wrap gap-2">
+                        ${app.tags.map(tag => `
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">${tag}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getCategoryColor(category) {
+            const colors = {
+                applications: 'bg-green-100 text-green-700',
+                games: 'bg-purple-100 text-purple-700',
+                simulations: 'bg-blue-100 text-blue-700'
+            };
+            return colors[category] || 'bg-gray-100 text-gray-700';
+        }
+
+        function showCategory(category) {
+            currentCategory = category;
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-500', 'text-white');
+                btn.classList.add('text-gray-600', 'hover:bg-gray-100');
+            });
+            
+            const activeBtn = document.querySelector(`[data-category="${category}"]`);
+            activeBtn.classList.add('bg-blue-500', 'text-white');
+            activeBtn.classList.remove('text-gray-600', 'hover:bg-gray-100');
+            
+            renderApps(category);
+        }
+
+        function openApp(path) {
+            // Add loading state
+            const container = document.querySelector('.container');
+            container.style.opacity = '0.5';
+            
+            // Hide portfolio content and show back button
+            setTimeout(() => {
+                container.style.display = 'none';
+                document.getElementById('back-button').classList.remove('hidden');
+                
+                // Create iframe for the app
+                const iframe = document.createElement('iframe');
+                iframe.src = path;
+                iframe.style.width = '100vw';
+                iframe.style.height = '100vh';
+                iframe.style.border = 'none';
+                iframe.style.position = 'fixed';
+                iframe.style.top = '0';
+                iframe.style.left = '0';
+                iframe.style.zIndex = '1000';
+                iframe.id = 'app-iframe';
+                
+                // Add loading handler
+                iframe.onload = function() {
+                    iframe.style.opacity = '1';
+                };
+                iframe.style.opacity = '0';
+                iframe.style.transition = 'opacity 0.3s ease';
+                
+                document.body.appendChild(iframe);
+                
+                // Prevent scrolling on the body when app is open
+                document.body.style.overflow = 'hidden';
+            }, 100);
+        }
+
+        function goHome() {
+            // Smooth transition back to portfolio
+            const iframe = document.getElementById('app-iframe');
+            const container = document.querySelector('.container');
+            
+            if (iframe) {
+                iframe.style.opacity = '0';
+                setTimeout(() => {
+                    iframe.remove();
+                }, 300);
+            }
+            
+            container.style.display = 'block';
+            container.style.opacity = '0';
+            document.getElementById('back-button').classList.add('hidden');
+            
+            // Restore scrolling
+            document.body.style.overflow = 'auto';
+            
+            // Fade in portfolio
+            setTimeout(() => {
+                container.style.opacity = '1';
+            }, 50);
+        }
+
+        // Add keyboard navigation support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const iframe = document.getElementById('app-iframe');
+                if (iframe) {
+                    goHome();
+                }
+            }
+        });
+
+        // Optimize for mobile performance
+        if ('serviceWorker' in navigator) {
+            // This can be implemented later for caching
+        }
+
+        // Initialize the page
+        renderApps();
+    </script>
+</body>
+</html>

@@ -39,19 +39,10 @@ if [ -f "$PROJECT_ROOT/update-cursorrules.sh" ]; then
         echo "📝 .cursorrules is up to date"
     else
         echo "📝 .cursorrules updated with current project info"
-        echo "💡 Consider committing the updated .cursorrules file:"
-        echo "   git add .cursorrules"
-        echo "   git commit -m 'docs: update .cursorrules with current project info'"
-        echo ""
-        echo "🤔 Do you want to auto-commit the .cursorrules update? [y/N]"
-        read -r response
-        if [[ "$response" =~ ^[Yy]$ ]]; then
-            git add .cursorrules
-            git commit -m "docs: update .cursorrules with current project info"
-            echo "✅ .cursorrules committed automatically"
-        else
-            echo "⚠️  .cursorrules updated but not committed"
-        fi
+        echo "📦 Auto-committing .cursorrules update..."
+        git add .cursorrules
+        git commit -m "docs: update .cursorrules with current project info"
+        echo "✅ .cursorrules committed automatically"
     fi
 else
     echo "⚠️  update-cursorrules.sh not found, skipping update"
@@ -78,7 +69,16 @@ if git diff --name-only HEAD~1 HEAD | grep -E "(package\.json|vite\.config\.|bui
     if [ -f "$PROJECT_ROOT/update-cursorrules.sh" ]; then
         cd "$PROJECT_ROOT"
         ./update-cursorrules.sh
-        echo "✅ .cursorrules updated"
+        
+        # Check if .cursorrules was modified and auto-commit
+        if ! git diff --quiet .cursorrules; then
+            echo "📦 Auto-committing .cursorrules update..."
+            git add .cursorrules
+            git commit -m "docs: update .cursorrules after structural changes"
+            echo "✅ .cursorrules updated and committed"
+        else
+            echo "✅ .cursorrules updated (no changes needed)"
+        fi
     fi
 fi
 EOF
@@ -100,7 +100,7 @@ echo ""
 echo "💡 Usage:"
 echo "   • Hooks run automatically on git push/commit"
 echo "   • Manual update: ./update-cursorrules.sh"
-echo "   • The hooks will prompt to auto-commit .cursorrules changes"
+echo "   • The hooks automatically commit .cursorrules changes"
 echo ""
 echo "🔍 To check hook status:"
 echo "   ls -la .git/hooks/"

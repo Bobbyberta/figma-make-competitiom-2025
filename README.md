@@ -38,6 +38,162 @@ http-server . -p 8000 --cors -o
 # Right-click index.html → "Open with Live Server"
 ```
 
+## 🏗️ Complete First-Time Setup from GitHub
+
+If you're starting fresh from GitHub (e.g., after deleting your local version), here's the complete setup process:
+
+### Prerequisites
+Before starting, ensure you have these installed:
+- **Node.js** (v16 or higher) - [Download here](https://nodejs.org/)
+- **Python 3** - [Download here](https://www.python.org/downloads/) or use system version
+- **Git** - [Download here](https://git-scm.com/) or use system version
+
+### Step 1: Clone the Repository
+```bash
+# Clone the repository
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd "YOUR_REPO_NAME"
+
+# If the repo name has spaces (like "Figma Make Competition"):
+cd "Figma Make Competition"
+```
+
+### Step 2: Verify Project Structure
+```bash
+# Check that you have the main files
+ls -la
+# You should see: index.html, styles.css, serve.py, build-all.sh, etc.
+
+# Check app directories
+ls Applications/ Games/ Simulations/
+```
+
+### Step 3: Install Dependencies for All Apps
+```bash
+# Make the setup script executable (if needed)
+chmod +x setup-project.sh
+
+# Run the complete setup script
+./setup-project.sh
+```
+
+**OR manually install dependencies for each app:**
+```bash
+# Install dependencies for each app individually
+cd "Applications/Time Zone Calculator" && npm install && cd ../..
+cd "Games/Glass Root Game Prototype" && npm install && cd ../..
+cd "Games/Rain Topography Simulation App" && npm install && cd ../..
+cd "Simulations/Bird Murmuration Simulator" && npm install && cd ../..
+cd "Simulations/Fractal Simulation with Config" && npm install && cd ../..
+cd "Simulations/Interactive Beach Simulation" && npm install && cd ../..
+cd "Simulations/Interactive Matrix Transformations" && npm install && cd ../..
+cd "Simulations/Reaction-Diffusion Simulation App" && npm install && cd ../..
+cd "Simulations/Vector Fields Visualization Tool" && npm install && cd ../..
+```
+
+### Step 4: Build All Apps for Production
+```bash
+# Make build script executable (if needed)
+chmod +x build-all.sh
+
+# Build all apps
+./build-all.sh
+```
+
+This will create a `build/` folder in each app directory with production-ready files.
+
+### Step 5: Test Locally
+```bash
+# Make serve script executable (if needed)
+chmod +x serve.py
+
+# Start the development server
+python3 serve.py
+
+# Or specify a port
+python3 serve.py 8080
+```
+
+Open your browser to `http://localhost:8000` (or whatever port you specified).
+
+### Step 6: Set Up Git Hooks (Optional but Recommended)
+```bash
+# Make git hooks script executable
+chmod +x setup-git-hooks.sh
+
+# Set up automated documentation updates
+./setup-git-hooks.sh
+```
+
+### Step 7: Update Documentation
+```bash
+# Make update script executable
+chmod +x update-cursorrules.sh
+
+# Update AI documentation with current project state
+./update-cursorrules.sh
+```
+
+### Troubleshooting First-Time Setup
+
+**If `./setup-project.sh` fails:**
+- Check that Node.js is installed: `node --version`
+- Manually install dependencies as shown in Step 3
+- Check for permission issues: `chmod +x *.sh`
+
+**If apps don't load in the portfolio:**
+- Verify each app built successfully: check for `build/` folders
+- Ensure all `vite.config.ts` files have `base: './'`
+- Check browser console for errors
+
+**If Python server won't start:**
+- Try: `python serve.py` instead of `python3 serve.py`
+- Install Python if needed
+- Check port isn't already in use
+
+**If builds fail:**
+- Check Node.js version: `node --version` (should be 16+)
+- Clear node_modules and reinstall: `rm -rf node_modules && npm install`
+- Check for disk space issues
+
+### Editing and Making Changes
+
+Once set up, here's how to modify the portfolio:
+
+**Adding a New App:**
+1. Create your app in the appropriate category folder
+2. Ensure `vite.config.ts` has `base: './'`
+3. Build the app: `cd "Your App" && npm run build`
+4. Add to the `apps` array in `index.html`
+5. Update `build-all.sh` to include your app
+6. Run `./update-cursorrules.sh` to update documentation
+
+**Modifying Existing Apps:**
+1. Make your changes in the app's `src/` folder
+2. Rebuild: `cd "App Name" && npm run build`
+3. Test: `python3 serve.py`
+
+**Updating Portfolio Styling:**
+1. Edit `styles.css` for global portfolio styles
+2. Edit individual app styles in their respective `src/` folders
+3. Rebuild affected apps
+
+**Deploying Changes:**
+```bash
+# Build everything
+./build-all.sh
+
+# Update documentation
+./update-cursorrules.sh
+
+# Commit and push
+git add .
+git commit -m "Your change description"
+git push origin main
+```
+
+Your GitHub Pages site will automatically update in a few minutes!
+
 ## 📁 Project Structure
 
 ```
